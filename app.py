@@ -82,9 +82,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state for user data
+# Initialize session state
 if 'user_data' not in st.session_state:
     st.session_state.user_data = None
+if 'predictions_complete' not in st.session_state:
+    st.session_state.predictions_complete = False
 
 # Header
 st.markdown('<h1 class="main-header">🔮 Customer Churn Prediction</h1>', unsafe_allow_html=True)
@@ -109,10 +111,12 @@ if uploaded_file is not None:
     try:
         df = pd.read_csv(uploaded_file)
         st.session_state.user_data = df
+        st.session_state.predictions_complete = False
         st.sidebar.success("✅ Data uploaded successfully!")
     except Exception as e:
         st.sidebar.error(f"Error reading file: {str(e)}")
         st.session_state.user_data = None
+        st.session_state.predictions_complete = False
 
 # Data Preview in Sidebar
 if st.session_state.user_data is not None:
@@ -134,11 +138,9 @@ feedback = st.sidebar.text_area("Share your feedback", height=100)
 if st.sidebar.button("Submit Feedback"):
     if feedback:
         st.sidebar.success("Thank you for your feedback!")
-        # Here you can add code to store feedback
     else:
         st.sidebar.warning("Please enter your feedback")
 
-# Mock functions for demonstration
 def load_model():
     """
     Load the trained model and preprocessor from disk.
@@ -165,6 +167,42 @@ def load_model():
     except Exception as e:
         st.error(f"Error loading model: {str(e)}")
         return None, None
+
+def process_and_predict_batch(df, model, preprocessor):
+    """
+    Process and predict churn for a batch of customers.
+    
+    Args:
+        df (pd.DataFrame): Input dataframe
+        model: Trained model
+        preprocessor: Trained preprocessor
+        
+    Returns:
+        pd.DataFrame: DataFrame with predictions
+    """
+    try:
+        # Make a copy to avoid SettingWithCopyWarning
+        df_processed = df.copy()
+        
+        # Handle missing values
+        df_processed['TotalCharges'] = df_processed['TotalCharges'].fillna(df_processed['MonthlyCharges'])
+        
+        # Prepare features
+        X = df_processed.drop(['customerID'], axis=1, errors='ignore')
+        
+        # Transform data using the pre-fitted preprocessor and predict
+        X_processed = preprocessor.transform(X)
+        probabilities = model.predict_proba(X_processed)[:, 1]
+        predictions = model.predict(X_processed)
+        
+        # Add results back to the original dataframe
+        df_processed['churn_probability'] = probabilities
+        df_processed['predicted_churn'] = predictions
+        
+        return df_processed
+    except Exception as e:
+        st.error(f"Error in batch prediction: {str(e)}")
+        return None
 
 def generate_sample_data():
     """
