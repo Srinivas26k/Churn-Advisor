@@ -1,11 +1,11 @@
-streamlit>=1.32.0
-pandas>=2.0.3
-numpy>=1.26.4
-scikit-learn==1.3.0
-plotly>=6.1.2
-joblib>=1.3.2
-shap>=0.48.0
-seaborn>=0.13.2
-matplotlib>=3.10.3
-protobuf>=3.20.0
-typing-extensions>=4.0.0
+streamlit==1.45.1
+pandas==2.2.2
+numpy==2.2.4
+scikit-learn==1.2.2  # Avoid source build issues
+plotly==6.1.2
+joblib==1.3.2
+shap==0.48.0
+seaborn==0.13.2
+matplotlib==3.10.3
+protobuf==4.21.12
+typing-extensions==4.12.2
