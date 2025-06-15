@@ -1,0 +1,52 @@
+{
+  "model_type": "GradientBoostingClassifier",
+  "training_date": "2025-06-15T08:58:21.010728",
+  "performance_metrics": {
+    "auc_roc": 0.6854369597436754,
+    "accuracy": 0.6834634492547906,
+    "precision": 0.7221074380165289,
+    "recall": 0.797945205479452,
+    "f1_score": 0.7581344902386117
+  },
+  "feature_columns": {
+    "categorical": [
+      "gender",
+      "Partner",
+      "Dependents",
+      "PhoneService",
+      "MultipleLines",
+      "InternetService",
+      "OnlineSecurity",
+      "OnlineBackup",
+      "DeviceProtection",
+      "TechSupport",
+      "StreamingTV",
+      "StreamingMovies",
+      "Contract",
+      "PaperlessBilling",
+      "PaymentMethod",
+      "tenure_group"
+    ],
+    "numerical": [
+      "SeniorCitizen",
+      "tenure",
+      "MonthlyCharges",
+      "TotalCharges",
+      "num_optional_services",
+      "monthly_charge_per_tenure",
+      "total_charge_per_month",
+      "is_month_to_month",
+      "is_electronic_check",
+      "has_fiber_optic",
+      "is_senior",
+      "has_streaming",
+      "has_protection"
+    ]
+  },
+  "training_data_info": {
+    "total_samples": 7043,
+    "training_samples": 5634,
+    "test_samples": 1409,
+    "churn_rate": 0.6216101093284112
+  }
+}
